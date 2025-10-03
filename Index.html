@@ -3,69 +3,63 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cadeados - Desafio</title>
+  <title>Desafio dos 5 Cadeados</title>
   <style>
     :root{
       --bg:#0f1724;
       --card:#0b1220;
-      --accent:#3bd671;
-      --muted:#97a0b3;
-      --glass: rgba(255,255,255,0.03);
+      --accent:#ffd166;
+      --muted:#9aa4b2;
+      --success:#4ade80;
+      --danger:#ff6b6b;
     }
-    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    html,body{height:100%}
     body{
       margin:0;
-      min-height:100vh;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background: linear-gradient(180deg, #071022 0%, #0b1b2b 100%);
+      color:#e6eef6;
       display:flex;
       align-items:center;
       justify-content:center;
-      background: radial-gradient(ellipse at top left, #0b1a2b 0%, var(--bg) 40%), #071024;
-      color:#e6eef8;
       padding:24px;
     }
-    .wrapper{
+    .container{
       width:100%;
-      max-width:900px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-      border-radius:12px;
+      max-width:920px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.03);
       padding:28px;
-      box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+      border-radius:12px;
+      box-shadow: 0 6px 30px rgba(2,6,23,0.6);
     }
-    h1{margin:0 0 8px 0;font-size:22px;}
-    p.lead{margin:0 0 18px 0;color:var(--muted);}
+    h1{margin:0 0 6px 0;font-size:20px}
+    p.lead{margin:0 0 20px 0;color:var(--muted)}
     .locks{
       display:grid;
       grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap:16px;
+      gap:14px;
     }
     .lock{
-      background:var(--card);
+      background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.006));
       border-radius:10px;
-      padding:16px;
-      border:1px solid rgba(255,255,255,0.03);
+      padding:14px;
       display:flex;
-      flex-direction:column;
       gap:12px;
-      align-items:stretch;
-    }
-    .lock .top{
-      display:flex;
       align-items:center;
-      gap:10px;
+      border:1px solid rgba(255,255,255,0.02);
     }
-    .icon{
-      font-size:28px;
-      width:48px;
-      height:48px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+    .ico{
+      width:56px;height:56px;
+      display:flex;align-items:center;justify-content:center;
       border-radius:10px;
-      background:var(--glass);
-      flex-shrink:0;
+      background:linear-gradient(180deg,#091426,#071726);
+      box-shadow: inset 0 -6px 12px rgba(0,0,0,0.5);
+      font-size:26px;
     }
-    .title{font-weight:600;}
-    .status{font-size:13px;color:var(--muted);}
+    .meta{flex:1}
+    .meta h3{margin:0;font-size:15px}
+    .meta p{margin:6px 0 10px 0;color:var(--muted);font-size:13px}
     input[type="text"]{
       width:100%;
       padding:10px 12px;
@@ -74,76 +68,69 @@
       background:rgba(255,255,255,0.02);
       color:inherit;
       outline:none;
-      font-size:14px;
+      transition:transform .08s ease;
+      box-sizing:border-box;
     }
-    button{
-      padding:10px 12px;
-      border-radius:8px;
-      border:0;
-      cursor:pointer;
-      font-weight:600;
-      background:linear-gradient(90deg,var(--accent), #32b75a);
-      color:#042018;
+    input[type="text"]:disabled{opacity:0.45;cursor:not-allowed}
+    .actions{display:flex;gap:8px;margin-top:6px}
+    .btn{
+      padding:8px 12px;border-radius:8px;border:0;cursor:pointer;
+      background:var(--accent);color:#071426;font-weight:600;
+      box-shadow: 0 4px 10px rgba(255,209,102,0.12);
     }
-    .row{display:flex;gap:8px;align-items:center;}
-    .unlocked{
-      color:#0b2a15;
-      background: linear-gradient(90deg,#9af6b5,#3bd671);
-      padding:6px 8px;
-      border-radius:8px;
-      font-weight:700;
-      display:inline-block;
+    .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.03)}
+    .status{font-size:13px;margin-top:8px}
+    .status.error{color:var(--danger)}
+    .status.ok{color:var(--success)}
+    .unlocked .ico{background:linear-gradient(180deg,#053e2d,#065c3f);color:var(--success)}
+    .locked .ico{color:var(--accent)}
+    .shake{
+      animation:shake .36s;
     }
-    .disabled{
-      opacity:0.45;
-      pointer-events:none;
+    @keyframes shake{
+      10%,90%{transform:translateX(-1px)}
+      20%,80%{transform:translateX(2px)}
+      30%,50%,70%{transform:translateX(-4px)}
+      40%,60%{transform:translateX(4px)}
     }
+
     .final{
       margin-top:18px;
-      padding:14px;
-      background:linear-gradient(180deg, rgba(59,214,113,0.06), rgba(255,255,255,0.01));
-      border-radius:10px;
-      border:1px solid rgba(59,214,113,0.06);
+      padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(74,222,128,0.06),rgba(74,222,128,0.02));
+      border:1px solid rgba(74,222,128,0.08);
+      display:none;
     }
-    .reveal{
-      margin-top:12px;
-      padding:12px;
-      border-radius:8px;
-      background:rgba(255,255,255,0.02);
-      font-family:monospace;
-      white-space:pre-wrap;
-    }
-    footer{margin-top:14px;color:var(--muted);font-size:13px;}
-    @media (max-width:520px){
-      .locks{grid-template-columns:1fr;}
+    .controls{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:18px}
+    .muted-small{color:var(--muted);font-size:13px}
+    footer{margin-top:16px;color:var(--muted);font-size:13px;text-align:center}
+    @media (max-width:420px){
+      .locks{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <div class="wrapper" role="main">
-    <h1>Desafio dos 5 Cadeados</h1>
-    <p class="lead">Desbloqueie os cadeados na ordem correta. Se errar, pode tentar de novo — mas não deixe de seguir a ordem.</p>
+  <div class="container" role="main" aria-labelledby="title">
+    <h1 id="title">Desafio dos 5 Cadeados</h1>
+    <p class="lead">Cada cadeado precisa da senha correta para destravar o próximo. Faça na ordem: 1 → 2 → 3 → 4 → 5.</p>
 
-    <div class="locks" id="locksContainer">
-      <!-- cadeados gerados por JS -->
+    <div class="locks" id="locks"></div>
+
+    <div class="final" id="finalBox" role="status" aria-live="polite">
+      <strong>🎉 Parabéns — todos os cadeados foram destravados!</strong>
+      <div class="muted-small" style="margin-top:8px;">Você completou o desafio. Bom trabalho!</div>
     </div>
 
-    <div id="finalArea" class="final" style="display:none;">
-      <strong>Parabéns — todos os cadeados foram desbloqueados! 🎉</strong>
-      <p class="status">As senhas (prêmio):</p>
-      <div class="reveal" id="revealPasswords"></div>
-      <div style="margin-top:10px;">
-        <button id="copyBtn">Copiar senhas</button>
-        <button id="resetBtn" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit;margin-left:8px;">Reiniciar</button>
-      </div>
+    <div class="controls">
+      <button class="btn secondary" id="resetBtn" title="Reiniciar progresso">Reiniciar</button>
+      <div class="muted-small">Progresso salvo localmente (até reiniciar).</div>
     </div>
 
-    <footer>Observação: comparação sem diferenciação entre maiúsculas/minúsculas e sem acentos.</footer>
+    <footer>Feito com ❤️ — coloque este arquivo como <code>index.html</code> no GitHub Pages.</footer>
   </div>
 
   <script>
-    // Senhas na ordem
-    const originalPasswords = [
+    // SENHAS — correspondem exatamente ao que o usuário informou
+    const PASSWORDS = [
       "1953",
       "HongKong",
       "HTCS",
@@ -151,226 +138,199 @@
       "Tigres Asiáticos"
     ];
 
-    // Normaliza (remove acentos e lower case) para comparar
-    function normalizeText(s){
-      if(!s && s !== "") return "";
-      return s.normalize ? s.normalize('NFD').replace(/\p{Diacritic}/gu, '') : s;
-    }
+    // --- Configuração das cadeados (rótulos)
+    const LABELS = [
+      "Cadeado 1",
+      "Cadeado 2",
+      "Cadeado 3",
+      "Cadeado 4",
+      "Cadeado 5"
+    ];
 
-    function normLower(s){
-      return normalizeText(s).toLowerCase().trim();
-    }
-
-    // Estado: qual índice foi desbloqueado (0..n-1). nextToUnlock = unlockedCount
-    let unlockedCount = 0;
-
-    const container = document.getElementById('locksContainer');
-    const finalArea = document.getElementById('finalArea');
-    const revealPasswords = document.getElementById('revealPasswords');
-    const copyBtn = document.getElementById('copyBtn');
+    // Inicialização do UI
+    const locksRoot = document.getElementById('locks');
+    const finalBox = document.getElementById('finalBox');
     const resetBtn = document.getElementById('resetBtn');
 
-    // Tenta manter progresso entre recarregamentos (opcional)
-    const STORAGE_KEY = 'cadeados_progress_v1';
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if(saved){
-      try{
-        const s = JSON.parse(saved);
-        if(typeof s.unlockedCount === 'number') unlockedCount = s.unlockedCount;
-      }catch(e){}
-    }
+    // Tenta carregar progresso do localStorage
+    let progress = JSON.parse(localStorage.getItem('cadeadosProgress') || '[]');
+
+    // garantimos que progress tenha booleanos para cada cadeado
+    progress = Array.from({length: PASSWORDS.length}, (_,i) => !!progress[i]);
 
     function saveProgress(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({unlockedCount}));
+      localStorage.setItem('cadeadosProgress', JSON.stringify(progress));
     }
 
-    function createLockCard(index){
-      const card = document.createElement('div');
-      card.className = 'lock';
-      const lockEmoji = index < unlockedCount ? '🔓' : '🔒';
-      card.innerHTML = `
-        <div class="top">
-          <div class="icon">${lockEmoji}</div>
-          <div style="flex:1">
-            <div class="title">Cadeado ${index+1}</div>
-            <div class="status" id="status-${index}">${index < unlockedCount ? 'Desbloqueado' : (index === unlockedCount ? 'Aguardando tentativa' : 'Bloqueado (ordem)')}</div>
-          </div>
-          <div style="min-width:90px;text-align:right">
-            <div style="font-size:13px;color:var(--muted)">Tentativas:</div>
-            <div id="tries-${index}" style="font-weight:700">0</div>
-          </div>
-        </div>
+    function createLock(index){
+      const unlocked = !!progress[index];
 
-        <div class="row" style="margin-top:6px;">
-          <input type="text" id="input-${index}" placeholder="Digite a senha" ${index === unlockedCount ? '' : 'disabled'} aria-label="Senha do cadeado ${index+1}">
-          <button id="btn-${index}" ${index === unlockedCount ? '' : 'disabled'}>Verificar</button>
-        </div>
-      `;
+      const el = document.createElement('div');
+      el.className = 'lock ' + (unlocked ? 'unlocked' : 'locked');
+      el.setAttribute('data-index', index);
 
-      // evento
-      const input = card.querySelector(`#input-${index}`);
-      const btn = card.querySelector(`#btn-${index}`);
-      const statusEl = card.querySelector(`#status-${index}`);
-      const triesEl = card.querySelector(`#tries-${index}`);
-      let tries = 0;
+      const ico = document.createElement('div');
+      ico.className = 'ico';
+      ico.innerHTML = unlocked ? '🔓' : '🔒';
 
-      function setDisabledForLater(){
-        // desativa se não for o próximo
-        if(index !== unlockedCount){
-          input.disabled = true;
-          btn.disabled = true;
-          card.classList.add('disabled');
-        } else {
-          input.disabled = false;
-          btn.disabled = false;
-          card.classList.remove('disabled');
-        }
-        // atualiza icon e status
-        const icon = card.querySelector('.icon');
-        if(index < unlockedCount){
-          icon.textContent = '🔓';
-          statusEl.textContent = 'Desbloqueado';
-        } else if (index === unlockedCount){
-          icon.textContent = '🔒';
-          statusEl.textContent = 'Aguardando tentativa';
-        } else {
-          icon.textContent = '🔒';
-          statusEl.textContent = 'Bloqueado (ordem)';
-        }
-      }
+      const meta = document.createElement('div');
+      meta.className = 'meta';
 
-      btn.addEventListener('click', () => {
-        const val = input.value || '';
-        tries++;
-        triesEl.textContent = tries;
-        const correctNorm = normLower(originalPasswords[index]);
-        const attemptNorm = normLower(val);
-        if(attemptNorm === correctNorm){
-          // desbloqueia
-          unlockedCount = Math.max(unlockedCount, index+1);
-          saveProgress();
-          // atualiza todos os cards UI
-          rebuildUI();
-        } else {
-          // pequena animação (shake)
-          input.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(0)' }], { duration: 300 });
-          statusEl.textContent = 'Senha incorreta — tente novamente';
-        }
-      });
+      const h = document.createElement('h3');
+      h.textContent = LABELS[index] + (index === 0 ? ' (início)' : '');
 
-      input.addEventListener('keyup', (e) => {
-        if(e.key === 'Enter') btn.click();
-      });
+      const p = document.createElement('p');
+      p.textContent = unlocked ? 'Destravado' : 'Protegido — insira a senha';
 
-      // exposer para atualizações
-      card.setDisabledForLater = setDisabledForLater;
-      return card;
-    }
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Senha';
+      input.autocomplete = 'off';
+      input.disabled = !isAvailable(index);
+      input.value = '';
 
-    // Cria todos os cards
-    let cards = [];
-    function buildCards(){
-      container.innerHTML = '';
-      cards = originalPasswords.map((p,i) => {
-        const c = createLockCard(i);
-        container.appendChild(c);
-        return c;
-      });
-    }
+      const actions = document.createElement('div');
+      actions.className = 'actions';
 
-    function rebuildUI(){
-      // rebuild cards to reflect state (could be optimized but small)
-      const inputs = container.querySelectorAll('input');
-      const buttons = container.querySelectorAll('button');
-      // Atualizar cada card
-      cards.forEach((card, idx) => {
-        // Recreate status and enabled state by calling method
-        if(card.setDisabledForLater) card.setDisabledForLater();
-        // additionally update tries display if exists (keeps previous)
-      });
+      const btnCheck = document.createElement('button');
+      btnCheck.className = 'btn';
+      btnCheck.textContent = 'Verificar';
+      btnCheck.disabled = input.disabled;
 
-      // Se finalizado:
-      if(unlockedCount >= originalPasswords.length){
-        finalArea.style.display = 'block';
-        revealPasswords.textContent = originalPasswords.map((p,i) => `${i+1} — ${p}`).join('\\n');
+      const status = document.createElement('div');
+      status.className = 'status';
+      if(unlocked){
+        status.classList.add('ok');
+        status.textContent = 'Senha correta';
       } else {
-        finalArea.style.display = 'none';
+        status.textContent = '';
       }
 
-      // enable only the next card's input & button
-      cards.forEach((card, idx) => {
-        const input = card.querySelector('input');
-        const btn = card.querySelector('button');
-        const icon = card.querySelector('.icon');
-        const statusEl = card.querySelector('.status');
-        if(idx < unlockedCount){
-          input.disabled = true;
-          btn.disabled = true;
-          icon.textContent = '🔓';
-          statusEl.textContent = 'Desbloqueado';
-          card.classList.remove('disabled');
-          // mark visually unlocked
-          if(!card.querySelector('.unlocked-badge')){
-            const badge = document.createElement('div');
-            badge.className = 'unlocked-badge';
-          }
-        } else if (idx === unlockedCount){
-          input.disabled = false;
-          btn.disabled = false;
-          icon.textContent = '🔒';
-          statusEl.textContent = 'Aguardando tentativa';
-          card.classList.remove('disabled');
-        } else {
-          input.disabled = true;
-          btn.disabled = true;
-          icon.textContent = '🔒';
-          statusEl.textContent = 'Bloqueado (ordem)';
-          card.classList.add('disabled');
-        }
+      actions.appendChild(btnCheck);
+
+      meta.appendChild(h);
+      meta.appendChild(p);
+      meta.appendChild(input);
+      meta.appendChild(actions);
+      meta.appendChild(status);
+
+      el.appendChild(ico);
+      el.appendChild(meta);
+
+      // Events
+      btnCheck.addEventListener('click', () => attempt(index, input, el, ico, p, status));
+      input.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') btnCheck.click();
       });
+
+      return el;
     }
 
-    // Inicializa UI
-    buildCards();
-    rebuildUI();
+    function isAvailable(index){
+      // só disponível se todos anteriores estiverem destravados
+      if(index === 0) return true;
+      for(let i=0;i<index;i++) if(!progress[i]) return false;
+      return true;
+    }
 
-    // copiar senhas
-    copyBtn.addEventListener('click', () => {
-      const txt = originalPasswords.map((p,i) => `${i+1} — ${p}`).join('\\n');
-      navigator.clipboard?.writeText(txt).then(() => {
-        copyBtn.textContent = 'Copiado!';
-        setTimeout(()=> copyBtn.textContent = 'Copiar senhas', 1500);
-      }).catch(() => {
-        alert('Não foi possível copiar automaticamente. Selecione e copie manualmente.');
-      });
-    });
+    function renderAll(){
+      locksRoot.innerHTML = '';
+      for(let i=0;i<PASSWORDS.length;i++){
+        const node = createLock(i);
+        locksRoot.appendChild(node);
+      }
+      checkFinal();
+    }
 
-    resetBtn.addEventListener('click', () => {
-      if(!confirm('Reiniciar progresso?')) return;
-      unlockedCount = 0;
-      localStorage.removeItem(STORAGE_KEY);
-      // reset tries counts and inputs
-      cards.forEach((card) => {
-        const input = card.querySelector('input');
-        const btn = card.querySelector('button');
-        const tries = card.querySelector('[id^="tries-"]');
-        if(input) input.value = '';
-        if(tries) tries.textContent = '0';
-      });
-      rebuildUI();
-    });
+    function attempt(index, inputEl, lockEl, icoEl, pEl, statusEl){
+      const attempt = inputEl.value.trim();
+      // comparação exata (case-sensitive), mas sem espaços extras
+      const correct = attempt === PASSWORDS[index];
 
-    // Pequena melhoria: exibir dica ao focar no input (opcional)
-    container.addEventListener('focusin', (e) => {
-      if(e.target.tagName === 'INPUT'){
-        // nada por enquanto
+      if(!isAvailable(index)){
+        // shouldn't happen due to disabled input, but handle gracefully
+        statusEl.className = 'status error';
+        statusEl.textContent = 'Você precisa destravar os cadeados anteriores primeiro.';
+        animateShake(inputEl);
+        return;
+      }
+
+      if(correct){
+        progress[index] = true;
+        saveProgress();
+        // atualizar UI do lock
+        lockEl.classList.remove('locked');
+        lockEl.classList.add('unlocked');
+        icoEl.textContent = '🔓';
+        pEl.textContent = 'Destravado';
+        statusEl.className = 'status ok';
+        statusEl.textContent = 'Senha correta';
+        inputEl.disabled = true;
+        // habilitar próximo (se houver)
+        const nextIndex = index + 1;
+        if(nextIndex < PASSWORDS.length){
+          const nextLock = document.querySelector('.lock[data-index="'+nextIndex+'"]');
+          if(nextLock){
+            const nextInput = nextLock.querySelector('input[type="text"]');
+            const nextBtn = nextLock.querySelector('.btn');
+            if(nextInput){
+              nextInput.disabled = false;
+              nextBtn.disabled = false;
+              nextInput.focus();
+            }
+          }
+        }
+        checkFinal();
+      } else {
+        // erro
+        statusEl.className = 'status error';
+        statusEl.textContent = 'Senha incorreta — tente novamente.';
+        animateShake(inputEl);
+        animateShake(lockEl);
+      }
+    }
+
+    function animateShake(element){
+      element.classList.remove('shake');
+      // trigger reflow to restart animation
+      void element.offsetWidth;
+      element.classList.add('shake');
+      setTimeout(()=> element.classList.remove('shake'), 420);
+    }
+
+    function checkFinal(){
+      const all = progress.every(Boolean);
+      finalBox.style.display = all ? 'block' : 'none';
+    }
+
+    // reset
+    resetBtn.addEventListener('click', ()=>{
+      if(confirm('Deseja reiniciar todo o progresso?')) {
+        progress = Array.from({length:PASSWORDS.length}, ()=>false);
+        saveProgress();
+        renderAll();
+        window.scrollTo({top:0,behavior:'smooth'});
       }
     });
 
-    // Reconstruir se a página for recarregada (mantém progresso)
-    window.addEventListener('load', () => {
-      rebuildUI();
-    });
+    // On load: if progress exists, ensure next inputs enabled appropriately
+    (function init(){
+      // ensure first available input enabled
+      for(let i=0;i<PASSWORDS.length;i++){
+        if(progress[i]) continue;
+        // the first locked index should have its input enabled (if previous are unlocked)
+        if(isAvailable(i)){
+          // nothing else needed; createLock will set disabled based on isAvailable
+          break;
+        }
+      }
+      renderAll();
+
+      // focus first available input
+      const firstAvailable = document.querySelector('.lock input:not([disabled])');
+      if(firstAvailable) firstAvailable.focus();
+    })();
+
   </script>
 </body>
 </html>
