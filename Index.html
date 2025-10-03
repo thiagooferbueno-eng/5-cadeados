@@ -3,134 +3,104 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Desafio dos 5 Cadeados</title>
+  <title>Cadeados Sequenciais</title>
   <style>
     :root{
       --bg:#0f1724;
       --card:#0b1220;
-      --accent:#ffd166;
-      --muted:#9aa4b2;
-      --success:#4ade80;
-      --danger:#ff6b6b;
+      --accent:#6ee7b7;
+      --muted:#9aa7b7;
+      --red:#ff6b6b;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-      background: linear-gradient(180deg, #071022 0%, #0b1b2b 100%);
-      color:#e6eef6;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071024 0%, #081428 60%);color:#e6f0f2}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:40px}
+    .card{
+      width:720px;
+      max-width:95%;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      padding:28px;border-radius:12px;
     }
-    .container{
-      width:100%;
-      max-width:920px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.03);
-      padding:28px;
-      border-radius:12px;
-      box-shadow: 0 6px 30px rgba(2,6,23,0.6);
-    }
-    h1{margin:0 0 6px 0;font-size:20px}
-    p.lead{margin:0 0 20px 0;color:var(--muted)}
-    .locks{
-      display:grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap:14px;
-    }
+    h1{margin:0 0 8px;font-size:20px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .locks{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
     .lock{
-      background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.006));
-      border-radius:10px;
-      padding:14px;
-      display:flex;
-      gap:12px;
-      align-items:center;
-      border:1px solid rgba(255,255,255,0.02);
+      background:var(--card);
+      padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);
+      display:flex;gap:12px;align-items:center;
     }
-    .ico{
-      width:56px;height:56px;
-      display:flex;align-items:center;justify-content:center;
-      border-radius:10px;
-      background:linear-gradient(180deg,#091426,#071726);
-      box-shadow: inset 0 -6px 12px rgba(0,0,0,0.5);
-      font-size:26px;
+    .icon{
+      font-size:28px;width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
     }
-    .meta{flex:1}
-    .meta h3{margin:0;font-size:15px}
-    .meta p{margin:6px 0 10px 0;color:var(--muted);font-size:13px}
+    .body{flex:1}
+    .body h3{margin:0;font-size:15px}
+    .body p{margin:6px 0 10px;color:var(--muted);font-size:13px}
+    .controls{display:flex;gap:8px;align-items:center}
     input[type="text"]{
-      width:100%;
-      padding:10px 12px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,0.06);
-      background:rgba(255,255,255,0.02);
-      color:inherit;
-      outline:none;
-      transition:transform .08s ease;
-      box-sizing:border-box;
+      padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);
+      background:transparent;color:inherit;outline:none;min-width:160px;
+      font-size:14px;
     }
-    input[type="text"]:disabled{opacity:0.45;cursor:not-allowed}
-    .actions{display:flex;gap:8px;margin-top:6px}
-    .btn{
-      padding:8px 12px;border-radius:8px;border:0;cursor:pointer;
-      background:var(--accent);color:#071426;font-weight:600;
-      box-shadow: 0 4px 10px rgba(255,209,102,0.12);
+    button{
+      padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:#042023;font-weight:600;cursor:pointer;
+      font-size:14px;
     }
-    .btn.secondary{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.03)}
-    .status{font-size:13px;margin-top:8px}
-    .status.error{color:var(--danger)}
-    .status.ok{color:var(--success)}
-    .unlocked .ico{background:linear-gradient(180deg,#053e2d,#065c3f);color:var(--success)}
-    .locked .ico{color:var(--accent)}
+    button[disabled]{opacity:0.45;cursor:not-allowed}
+    .status{font-size:13px;color:var(--muted);margin-top:8px}
+    .unlocked{color:var(--accent);font-weight:700}
+    .error{color:var(--red);font-weight:700}
     .shake{
-      animation:shake .36s;
+      animation:shake 380ms;
     }
     @keyframes shake{
-      10%,90%{transform:translateX(-1px)}
-      20%,80%{transform:translateX(2px)}
-      30%,50%,70%{transform:translateX(-4px)}
-      40%,60%{transform:translateX(4px)}
+      0%{transform:translateX(0)}
+      20%{transform:translateX(-6px)}
+      40%{transform:translateX(6px)}
+      60%{transform:translateX(-4px)}
+      80%{transform:translateX(4px)}
+      100%{transform:translateX(0)}
     }
-
-    .final{
-      margin-top:18px;
-      padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(74,222,128,0.06),rgba(74,222,128,0.02));
-      border:1px solid rgba(74,222,128,0.08);
-      display:none;
+    .footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+    .reset{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;cursor:pointer}
+    .win{
+      margin-top:14px;padding:12px;border-radius:10px;background:linear-gradient(90deg, rgba(110,231,183,0.08), rgba(110,231,183,0.03));color:var(--accent);
+      font-weight:700;border:1px solid rgba(110,231,183,0.08)
     }
-    .controls{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:18px}
-    .muted-small{color:var(--muted);font-size:13px}
-    footer{margin-top:16px;color:var(--muted);font-size:13px;text-align:center}
-    @media (max-width:420px){
-      .locks{grid-template-columns:1fr}
-    }
+    @media (max-width:560px){ .locks{grid-template-columns:1fr} .icon{width:48px;height:48px} }
   </style>
 </head>
 <body>
-  <div class="container" role="main" aria-labelledby="title">
-    <h1 id="title">Desafio dos 5 Cadeados</h1>
-    <p class="lead">Cada cadeado precisa da senha correta para destravar o próximo. Faça na ordem: 1 → 2 → 3 → 4 → 5.</p>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="title">
+      <h1 id="title">Desafio dos 5 Cadeados</h1>
+      <p class="lead">Insira as senhas na ordem correta. Cada cadeado só pode ser desbloqueado depois do anterior.</p>
 
-    <div class="locks" id="locks"></div>
+      <div class="locks" id="locksContainer">
+        <!-- Locks will be injected by JS -->
+      </div>
 
-    <div class="final" id="finalBox" role="status" aria-live="polite">
-      <strong>🎉 Parabéns — todos os cadeados foram destravados!</strong>
-      <div class="muted-small" style="margin-top:8px;">Você completou o desafio. Bom trabalho!</div>
+      <div class="footer">
+        <div style="color:var(--muted);font-size:13px">
+          Dica: as senhas são **case-sensitive** (maiúsculas e minúsculas importam) e espaços/acento também.
+        </div>
+        <div>
+          <button class="reset" id="resetBtn" title="Reiniciar">Reiniciar</button>
+        </div>
+      </div>
+
+      <div id="winBox" style="display:none" class="win" role="status" aria-live="polite">
+        🎉 Parabéns — todos os cadeados foram desbloqueados!
+      </div>
     </div>
-
-    <div class="controls">
-      <button class="btn secondary" id="resetBtn" title="Reiniciar progresso">Reiniciar</button>
-      <div class="muted-small">Progresso salvo localmente (até reiniciar).</div>
-    </div>
-
-    <footer>Feito com ❤️ — coloque este arquivo como <code>index.html</code> no GitHub Pages.</footer>
   </div>
 
   <script>
-    // SENHAS — correspondem exatamente ao que o usuário informou
-    const PASSWORDS = [
+    // Senhas fornecidas pelo usuário (ordem importa)
+    const passwords = [
       "1953",
       "HongKong",
       "HTCS",
@@ -138,199 +108,169 @@
       "Tigres Asiáticos"
     ];
 
-    // --- Configuração das cadeados (rótulos)
-    const LABELS = [
-      "Cadeado 1",
-      "Cadeado 2",
-      "Cadeado 3",
-      "Cadeado 4",
-      "Cadeado 5"
-    ];
+    // Cria a UI dos cadeados
+    const container = document.getElementById('locksContainer');
+    const winBox = document.getElementById('winBox');
 
-    // Inicialização do UI
-    const locksRoot = document.getElementById('locks');
-    const finalBox = document.getElementById('finalBox');
-    const resetBtn = document.getElementById('resetBtn');
+    const lockStates = passwords.map(() => ({ unlocked:false }));
 
-    // Tenta carregar progresso do localStorage
-    let progress = JSON.parse(localStorage.getItem('cadeadosProgress') || '[]');
-
-    // garantimos que progress tenha booleanos para cada cadeado
-    progress = Array.from({length: PASSWORDS.length}, (_,i) => !!progress[i]);
-
-    function saveProgress(){
-      localStorage.setItem('cadeadosProgress', JSON.stringify(progress));
-    }
-
-    function createLock(index){
-      const unlocked = !!progress[index];
-
+    function createLock(idx){
       const el = document.createElement('div');
-      el.className = 'lock ' + (unlocked ? 'unlocked' : 'locked');
-      el.setAttribute('data-index', index);
+      el.className = 'lock';
+      el.setAttribute('data-idx', idx);
 
-      const ico = document.createElement('div');
-      ico.className = 'ico';
-      ico.innerHTML = unlocked ? '🔓' : '🔒';
+      const icon = document.createElement('div');
+      icon.className = 'icon';
+      icon.innerHTML = '🔒';
+      el.appendChild(icon);
 
-      const meta = document.createElement('div');
-      meta.className = 'meta';
+      const body = document.createElement('div');
+      body.className = 'body';
+      const title = document.createElement('h3');
+      title.textContent = `Cadeado ${idx + 1}`;
+      const desc = document.createElement('p');
+      desc.textContent = `Digite a senha correta para desbloquear.`;
+      const status = document.createElement('div');
+      status.className = 'status';
+      status.textContent = 'Aguardando...';
 
-      const h = document.createElement('h3');
-      h.textContent = LABELS[index] + (index === 0 ? ' (início)' : '');
+      body.appendChild(title);
+      body.appendChild(desc);
+      body.appendChild(status);
 
-      const p = document.createElement('p');
-      p.textContent = unlocked ? 'Destravado' : 'Protegido — insira a senha';
-
+      const controls = document.createElement('div');
+      controls.className = 'controls';
       const input = document.createElement('input');
       input.type = 'text';
       input.placeholder = 'Senha';
       input.autocomplete = 'off';
-      input.disabled = !isAvailable(index);
-      input.value = '';
+      input.id = `input-${idx}`;
+      const btn = document.createElement('button');
+      btn.textContent = 'Abrir';
+      btn.id = `btn-${idx}`;
 
-      const actions = document.createElement('div');
-      actions.className = 'actions';
+      controls.appendChild(input);
+      controls.appendChild(btn);
 
-      const btnCheck = document.createElement('button');
-      btnCheck.className = 'btn';
-      btnCheck.textContent = 'Verificar';
-      btnCheck.disabled = input.disabled;
+      el.appendChild(body);
+      el.appendChild(controls);
 
-      const status = document.createElement('div');
-      status.className = 'status';
-      if(unlocked){
-        status.classList.add('ok');
-        status.textContent = 'Senha correta';
+      // initial state: only first enabled
+      if(idx !== 0){
+        input.disabled = true;
+        btn.disabled = true;
+        status.textContent = 'Bloqueado (aguardando anterior).';
       } else {
-        status.textContent = '';
+        status.textContent = 'Pronto para tentar.';
       }
 
-      actions.appendChild(btnCheck);
-
-      meta.appendChild(h);
-      meta.appendChild(p);
-      meta.appendChild(input);
-      meta.appendChild(actions);
-      meta.appendChild(status);
-
-      el.appendChild(ico);
-      el.appendChild(meta);
-
-      // Events
-      btnCheck.addEventListener('click', () => attempt(index, input, el, ico, p, status));
+      // event: click button or enter
+      btn.addEventListener('click', () => tryUnlock(idx));
       input.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter') btnCheck.click();
+        if(e.key === 'Enter') tryUnlock(idx);
       });
 
       return el;
     }
 
-    function isAvailable(index){
-      // só disponível se todos anteriores estiverem destravados
-      if(index === 0) return true;
-      for(let i=0;i<index;i++) if(!progress[i]) return false;
-      return true;
-    }
+    // render all
+    passwords.forEach((_, i) => container.appendChild(createLock(i)));
 
-    function renderAll(){
-      locksRoot.innerHTML = '';
-      for(let i=0;i<PASSWORDS.length;i++){
-        const node = createLock(i);
-        locksRoot.appendChild(node);
-      }
-      checkFinal();
-    }
+    function tryUnlock(idx){
+      const input = document.getElementById(`input-${idx}`);
+      const btn = document.getElementById(`btn-${idx}`);
+      const lockEl = container.querySelector(`[data-idx="${idx}"]`);
+      const status = lockEl.querySelector('.status');
+      const icon = lockEl.querySelector('.icon');
 
-    function attempt(index, inputEl, lockEl, icoEl, pEl, statusEl){
-      const attempt = inputEl.value.trim();
-      // comparação exata (case-sensitive), mas sem espaços extras
-      const correct = attempt === PASSWORDS[index];
+      if(lockStates[idx].unlocked) return;
 
-      if(!isAvailable(index)){
-        // shouldn't happen due to disabled input, but handle gracefully
-        statusEl.className = 'status error';
-        statusEl.textContent = 'Você precisa destravar os cadeados anteriores primeiro.';
-        animateShake(inputEl);
+      const attempt = input.value.trim();
+
+      // check previous unlocked (safety)
+      if(idx > 0 && !lockStates[idx-1].unlocked){
+        status.textContent = 'Você precisa desbloquear o cadeado anterior primeiro.';
+        status.classList.remove('error','unlocked');
+        status.classList.add('error');
         return;
       }
 
-      if(correct){
-        progress[index] = true;
-        saveProgress();
-        // atualizar UI do lock
-        lockEl.classList.remove('locked');
-        lockEl.classList.add('unlocked');
-        icoEl.textContent = '🔓';
-        pEl.textContent = 'Destravado';
-        statusEl.className = 'status ok';
-        statusEl.textContent = 'Senha correta';
-        inputEl.disabled = true;
-        // habilitar próximo (se houver)
-        const nextIndex = index + 1;
-        if(nextIndex < PASSWORDS.length){
-          const nextLock = document.querySelector('.lock[data-index="'+nextIndex+'"]');
-          if(nextLock){
-            const nextInput = nextLock.querySelector('input[type="text"]');
-            const nextBtn = nextLock.querySelector('.btn');
-            if(nextInput){
-              nextInput.disabled = false;
-              nextBtn.disabled = false;
-              nextInput.focus();
-            }
-          }
+      if(attempt === passwords[idx]){
+        // success
+        lockStates[idx].unlocked = true;
+        icon.innerHTML = '🔓';
+        input.disabled = true;
+        btn.disabled = true;
+        status.textContent = 'Desbloqueado!';
+        status.classList.remove('error');
+        status.classList.add('unlocked');
+
+        // enable next
+        const nextIdx = idx + 1;
+        if(nextIdx < passwords.length){
+          const nextInput = document.getElementById(`input-${nextIdx}`);
+          const nextBtn = document.getElementById(`btn-${nextIdx}`);
+          const nextLock = container.querySelector(`[data-idx="${nextIdx}"]`);
+          const nextStatus = nextLock.querySelector('.status');
+          nextInput.disabled = false;
+          nextBtn.disabled = false;
+          nextStatus.textContent = 'Pronto para tentar.';
+          nextStatus.classList.remove('error','unlocked');
+        } else {
+          // all unlocked
+          winBox.style.display = 'block';
+          winBox.focus();
         }
-        checkFinal();
       } else {
-        // erro
-        statusEl.className = 'status error';
-        statusEl.textContent = 'Senha incorreta — tente novamente.';
-        animateShake(inputEl);
-        animateShake(lockEl);
+        // wrong
+        status.textContent = 'Senha incorreta — tente novamente.';
+        status.classList.remove('unlocked');
+        status.classList.add('error');
+        // shake animation
+        lockEl.classList.remove('shake');
+        // reflow to restart animation
+        void lockEl.offsetWidth;
+        lockEl.classList.add('shake');
+        // clear input (optional) and focus
+        input.value = '';
+        input.focus();
       }
     }
 
-    function animateShake(element){
-      element.classList.remove('shake');
-      // trigger reflow to restart animation
-      void element.offsetWidth;
-      element.classList.add('shake');
-      setTimeout(()=> element.classList.remove('shake'), 420);
-    }
+    // Reset button
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      // reset states
+      for(let i=0;i<passwords.length;i++){
+        lockStates[i].unlocked = false;
+        const lockEl = container.querySelector(`[data-idx="${i}"]`);
+        const icon = lockEl.querySelector('.icon');
+        const input = document.getElementById(`input-${i}`);
+        const btn = document.getElementById(`btn-${i}`);
+        const status = lockEl.querySelector('.status');
 
-    function checkFinal(){
-      const all = progress.every(Boolean);
-      finalBox.style.display = all ? 'block' : 'none';
-    }
-
-    // reset
-    resetBtn.addEventListener('click', ()=>{
-      if(confirm('Deseja reiniciar todo o progresso?')) {
-        progress = Array.from({length:PASSWORDS.length}, ()=>false);
-        saveProgress();
-        renderAll();
-        window.scrollTo({top:0,behavior:'smooth'});
+        icon.innerHTML = '🔒';
+        input.value = '';
+        if(i === 0){
+          input.disabled = false;
+          btn.disabled = false;
+          status.textContent = 'Pronto para tentar.';
+        } else {
+          input.disabled = true;
+          btn.disabled = true;
+          status.textContent = 'Bloqueado (aguardando anterior).';
+        }
+        status.classList.remove('unlocked','error');
       }
+      winBox.style.display = 'none';
+      // focus first input
+      document.getElementById('input-0').focus();
     });
 
-    // On load: if progress exists, ensure next inputs enabled appropriately
-    (function init(){
-      // ensure first available input enabled
-      for(let i=0;i<PASSWORDS.length;i++){
-        if(progress[i]) continue;
-        // the first locked index should have its input enabled (if previous are unlocked)
-        if(isAvailable(i)){
-          // nothing else needed; createLock will set disabled based on isAvailable
-          break;
-        }
-      }
-      renderAll();
-
-      // focus first available input
-      const firstAvailable = document.querySelector('.lock input:not([disabled])');
-      if(firstAvailable) firstAvailable.focus();
-    })();
-
+    // focus first input on load
+    window.addEventListener('load', () => {
+      document.getElementById('input-0').focus();
+    });
   </script>
 </body>
 </html>
+
